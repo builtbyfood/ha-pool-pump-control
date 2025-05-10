@@ -1,0 +1,254 @@
+blueprint:
+  name: Pool Pump Speed Schedule
+  description: Controls a three-speed pool pump based on customizable time schedules for each season
+  domain: automation
+  input:
+    pump_low_speed:
+      name: Low Speed Switch (1500rpm)
+      description: Switch entity for the low speed (1500rpm)
+      selector:
+        entity:
+          domain: switch
+    pump_medium_speed:
+      name: Medium Speed Switch (2500rpm)
+      description: Switch entity for the medium speed (2500rpm)
+      selector:
+        entity:
+          domain: switch
+    pump_high_speed:
+      name: High Speed Switch (3000rpm)
+      description: Switch entity for the high speed (3000rpm)
+      selector:
+        entity:
+          domain: switch
+    cool_season_start_month:
+      name: Cool Season Start Month
+      description: Month when cool season starts (1-12)
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 12
+          mode: slider
+    cool_season_start_day:
+      name: Cool Season Start Day
+      description: Day when cool season starts (1-31)
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 31
+          mode: slider
+    cool_season_end_month:
+      name: Cool Season End Month
+      description: Month when cool season ends (1-12)
+      default: 4
+      selector:
+        number:
+          min: 1
+          max: 12
+          mode: slider
+    cool_season_end_day:
+      name: Cool Season End Day
+      description: Day when cool season ends (1-31)
+      default: 30
+      selector:
+        number:
+          min: 1
+          max: 31
+          mode: slider
+    # Cool Season Time Settings
+    cool_low_speed_time1_start:
+      name: Cool Season - Low Speed - First Period Start
+      description: Start time for first low speed period in cool season (HH:MM)
+      default: "05:02"
+      selector:
+        time:
+    cool_low_speed_time1_end:
+      name: Cool Season - Low Speed - First Period End
+      description: End time for first low speed period in cool season (HH:MM)
+      default: "09:02"
+      selector:
+        time:
+    cool_low_speed_time2_start:
+      name: Cool Season - Low Speed - Second Period Start
+      description: Start time for second low speed period in cool season (HH:MM)
+      default: "17:02"
+      selector:
+        time:
+    cool_low_speed_time2_end:
+      name: Cool Season - Low Speed - Second Period End
+      description: End time for second low speed period in cool season (HH:MM)
+      default: "21:02"
+      selector:
+        time:
+    cool_medium_speed_time_start:
+      name: Cool Season - Medium Speed - Start
+      description: Start time for medium speed in cool season (HH:MM)
+      default: "09:03"
+      selector:
+        time:
+    cool_medium_speed_time_end:
+      name: Cool Season - Medium Speed - End
+      description: End time for medium speed in cool season (HH:MM)
+      default: "17:01"
+      selector:
+        time:
+    cool_high_speed_time_start:
+      name: Cool Season - High Speed - Start
+      description: Start time for high speed in cool season (HH:MM)
+      default: "21:03"
+      selector:
+        time:
+    cool_high_speed_time_end:
+      name: Cool Season - High Speed - End
+      description: End time for high speed in cool season (HH:MM)
+      default: "23:58"
+      selector:
+        time:
+    # Warm Season Time Settings
+    warm_low_speed_time1_start:
+      name: Warm Season - Low Speed - First Period Start
+      description: Start time for first low speed period in warm season (HH:MM)
+      default: "06:02"
+      selector:
+        time:
+    warm_low_speed_time1_end:
+      name: Warm Season - Low Speed - First Period End
+      description: End time for first low speed period in warm season (HH:MM)
+      default: "18:32"
+      selector:
+        time:
+    warm_low_speed_time2_start:
+      name: Warm Season - Low Speed - Second Period Start
+      description: Start time for second low speed period in warm season (HH:MM)
+      default: "20:32"
+      selector:
+        time:
+    warm_low_speed_time2_end:
+      name: Warm Season - Low Speed - Second Period End
+      description: End time for second low speed period in warm season (HH:MM)
+      default: "22:32"
+      selector:
+        time:
+    warm_medium_speed_time_start:
+      name: Warm Season - Medium Speed - Start
+      description: Start time for medium speed in warm season (HH:MM)
+      default: "02:03"
+      selector:
+        time:
+    warm_medium_speed_time_end:
+      name: Warm Season - Medium Speed - End
+      description: End time for medium speed in warm season (HH:MM)
+      default: "05:03"
+      selector:
+        time:
+    warm_high_speed_time_start:
+      name: Warm Season - High Speed - Start
+      description: Start time for high speed in warm season (HH:MM)
+      default: "00:02"
+      selector:
+        time:
+    warm_high_speed_time_end:
+      name: Warm Season - High Speed - End
+      description: End time for high speed in warm season (HH:MM)
+      default: "02:02"
+      selector:
+        time:
+
+mode: restart
+max_exceeded: silent
+
+trigger:
+  - platform: time_pattern
+    minutes: "1"
+
+variables:
+  pump_low: !input pump_low_speed
+  pump_medium: !input pump_medium_speed
+  pump_high: !input pump_high_speed
+  cool_start_month: !input cool_season_start_month
+  cool_start_day: !input cool_season_start_day
+  cool_end_month: !input cool_season_end_month
+  cool_end_day: !input cool_season_end_day
+  
+  # Cool Season Times
+  cool_low_time1_start: !input cool_low_speed_time1_start
+  cool_low_time1_end: !input cool_low_speed_time1_end
+  cool_low_time2_start: !input cool_low_speed_time2_start
+  cool_low_time2_end: !input cool_low_speed_time2_end
+  cool_med_time_start: !input cool_medium_speed_time_start
+  cool_med_time_end: !input cool_medium_speed_time_end
+  cool_high_time_start: !input cool_high_speed_time_start
+  cool_high_time_end: !input cool_high_speed_time_end
+  
+  # Warm Season Times
+  warm_low_time1_start: !input warm_low_speed_time1_start
+  warm_low_time1_end: !input warm_low_speed_time1_end
+  warm_low_time2_start: !input warm_low_speed_time2_start
+  warm_low_time2_end: !input warm_low_speed_time2_end
+  warm_med_time_start: !input warm_medium_speed_time_start
+  warm_med_time_end: !input warm_medium_speed_time_end
+  warm_high_time_start: !input warm_high_speed_time_start
+  warm_high_time_end: !input warm_high_speed_time_end
+  
+  now_month: "{{ now().month }}"
+  now_day: "{{ now().day }}"
+  now_time: "{{ now().strftime('%H:%M') }}"
+
+condition: []
+
+action:
+  - variables:
+      is_cool_season: >-
+        {% if cool_start_month > cool_end_month %}
+          {{ (now_month >= cool_start_month and now_day >= cool_start_day) or 
+             (now_month <= cool_end_month and now_day <= cool_end_day) }}
+        {% else %}
+          {{ (now_month == cool_start_month and now_day >= cool_start_day) or 
+             (now_month > cool_start_month and now_month < cool_end_month) or 
+             (now_month == cool_end_month and now_day <= cool_end_day) }}
+        {% endif %}
+      active_speed: >-
+        {% if is_cool_season %}
+          {# Cool Season #}
+          {% if (now_time >= cool_low_time1_start and now_time <= cool_low_time1_end) or 
+                (now_time >= cool_low_time2_start and now_time <= cool_low_time2_end) %}
+            {{ pump_low }}
+          {% elif now_time >= cool_med_time_start and now_time <= cool_med_time_end %}
+            {{ pump_medium }}
+          {% elif now_time >= cool_high_time_start and now_time <= cool_high_time_end %}
+            {{ pump_high }}
+          {% else %}
+            none
+          {% endif %}
+        {% else %}
+          {# Warm Season #}
+          {% if (now_time >= warm_low_time1_start and now_time <= warm_low_time1_end) or 
+                (now_time >= warm_low_time2_start and now_time <= warm_low_time2_end) %}
+            {{ pump_low }}
+          {% elif now_time >= warm_med_time_start and now_time <= warm_med_time_end %}
+            {{ pump_medium }}
+          {% elif now_time >= warm_high_time_start and now_time <= warm_high_time_end %}
+            {{ pump_high }}
+          {% else %}
+            none
+          {% endif %}
+        {% endif %}
+
+  # Turn off all pumps first to ensure clean state
+  - service: switch.turn_off
+    target:
+      entity_id:
+        - "{{ pump_low }}"
+        - "{{ pump_medium }}"
+        - "{{ pump_high }}"
+    
+  # If there is an active speed for this time slot, turn it on
+  - if:
+      condition: template
+      value_template: "{{ active_speed != 'none' }}"
+    then:
+      - service: switch.turn_on
+        target:
+          entity_id: "{{ active_speed }}"
