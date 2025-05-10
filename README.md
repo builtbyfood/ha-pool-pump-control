@@ -7,7 +7,7 @@
   Add your open source license, GitHub uses MIT license.
 -->
 
-# GitHub Pages
+# variable speed pool pump control
 
 </header>
 This was originally written to work with SRP's time of use energy plan to control the pump to run low speed during the highest cost of the day and high speeds during the low cost times of the day. I figured others could enjoy this and tweak it to work for them.
