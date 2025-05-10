@@ -1,0 +1,45 @@
+Blueprint Features
+
+Customizable Entities:
+
+You can select which switch entities control each speed (1500rpm, 2500rpm, 3000rpm)
+
+
+Configurable Seasons:
+
+You can set the start and end dates for the cool season through the UI
+The warm season is automatically calculated as the remaining time of the year
+
+
+Preset Schedules:
+
+Maintains your specified time schedules for each speed in both seasons:
+
+Cool Season: Low speed at 5:02-9:02 & 17:02-21:02, Medium speed at 9:03-17:01, High speed at 21:03-23:58
+Warm Season: Low speed at 6:02-18:32 & 20:32-22:32, Medium speed at 2:03-5:03, High speed at 0:02-2:02
+
+
+
+
+Clean Operation:
+
+Turns off all speeds before activating the appropriate one
+Checks for changes every minute
+Only one speed will be active at any time
+
+
+
+How to Use This Blueprint
+
+Save this YAML in a file named pool_pump_schedule.yaml in your /config/blueprints/automation/ directory
+In Home Assistant, go to Configuration → Blueprints
+Find "Pool Pump Speed Schedule" and click "Create Automation"
+Fill in the entities for each speed switch:
+
+Low Speed: switch.sonoff_100204e49b_2
+Medium Speed: switch.sonoff_100204e49b_3
+High Speed: switch.sonoff_100204e49b_1
+
+
+Adjust the season dates if needed (defaults match your specification)
+Save the automation
