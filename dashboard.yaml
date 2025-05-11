@@ -1,0 +1,144 @@
+title: Pool Pump Control
+views:
+  - title: Pool Pump
+    path: pool-pump
+    badges: []
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Pool Pump Control Center
+            subtitle: Monitor and control your three-speed pool pump
+            alignment: center
+          
+          - type: entities
+            title: Automation Control
+            entities:
+              - entity: automation.pool_pump_schedule
+                name: Pool Pump Schedule Automation
+                icon: mdi:engine
+                secondary_info: last-changed
+            footer:
+              type: buttons
+              entities:
+                - entity: automation.pool_pump_schedule
+                  icon: mdi:power
+                  name: Toggle Automation
+            state_color: true
+          
+          - type: custom:mushroom-template-card
+            primary: Current Season
+            secondary: >
+              {% set month = now().month %}
+              {% set day = now().day %}
+              {% if (month == 10 and day >= 30) or (month >= 11) or (month <= 4) or (month == 5 and day == 0) %}
+                Cool Season (Oct 30 - Apr 30)
+              {% else %}
+                Warm Season (May 1 - Oct 29)
+              {% endif %}
+            icon: >
+              {% set month = now().month %}
+              {% set day = now().day %}
+              {% if (month == 10 and day >= 30) or (month >= 11) or (month <= 4) or (month == 5 and day == 0) %}
+                mdi:snowflake
+              {% else %}
+                mdi:sun-thermometer
+              {% endif %}
+            card_mod:
+              style: |
+                ha-card {
+                  --ha-card-background: 
+                    {% set month = now().month %}
+                    {% set day = now().day %}
+                    {% if (month == 10 and day >= 30) or (month >= 11) or (month <= 4) or (month == 5 and day == 0) %}
+                      rgba(0, 128, 255, 0.1)
+                    {% else %}
+                      rgba(255, 150, 0, 0.1)
+                    {% endif %};
+                }
+
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Pump Status
+            subtitle: Current operation
+          
+          - type: glance
+            title: Pump Speed Status
+            columns: 3
+            show_name: true
+            show_state: true
+            state_color: true
+            entities:
+              - entity: switch.sonoff_100204e49b_2
+                name: Low Speed
+                icon: mdi:speedometer-slow
+              - entity: switch.sonoff_100204e49b_3
+                name: Medium Speed
+                icon: mdi:speedometer-medium
+              - entity: switch.sonoff_100204e49b_1
+                name: High Speed
+                icon: mdi:speedometer
+          
+          - type: history-graph
+            title: Pump Operation History
+            hours_to_show: 24
+            refresh_interval: 0
+            entities:
+              - entity: switch.sonoff_100204e49b_2
+                name: Low Speed (1500rpm)
+              - entity: switch.sonoff_100204e49b_3
+                name: Medium Speed (2500rpm)
+              - entity: switch.sonoff_100204e49b_1
+                name: High Speed (3000rpm)
+
+      - type: vertical-stack
+        cards:
+          - type: custom:mushroom-title-card
+            title: Manual Controls
+            subtitle: Override automation
+          
+          - type: entities
+            title: Manual Speed Control
+            entities:
+              - entity: switch.sonoff_100204e49b_2
+                name: Low Speed (1500rpm)
+                icon: mdi:speedometer-slow
+                secondary_info: last-changed
+              - entity: switch.sonoff_100204e49b_3
+                name: Medium Speed (2500rpm)
+                icon: mdi:speedometer-medium
+                secondary_info: last-changed
+              - entity: switch.sonoff_100204e49b_1
+                name: High Speed (3000rpm)
+                icon: mdi:speedometer
+                secondary_info: last-changed
+              - type: divider
+              - type: button
+                icon: mdi:pump-off
+                name: Turn All Off
+                tap_action:
+                  action: call-service
+                  service: switch.turn_off
+                  target:
+                    entity_id:
+                      - switch.sonoff_100204e49b_1
+                      - switch.sonoff_100204e49b_2
+                      - switch.sonoff_100204e49b_3
+
+      - type: history-graph
+        title: Automation History
+        hours_to_show: 24
+        entities:
+          - entity: automation.pool_pump_schedule
+            name: Pool Pump Automation
+            
+      - type: custom:logbook-card
+        title: Recent Pool Pump Activity
+        entities:
+          - automation.pool_pump_schedule
+          - switch.sonoff_100204e49b_1
+          - switch.sonoff_100204e49b_2
+          - switch.sonoff_100204e49b_3
+        hours_to_show: 24
+        max_items: 10
