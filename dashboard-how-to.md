@@ -12,6 +12,8 @@ auto-entities (for the automation history section)
 <br>
 card-mod (for styling the season indicator)
 <br>
+Logbook Card (for history)
+<br>
 <br>
 <b>To Install:</b>
 <br>
@@ -33,3 +35,4 @@ Automation Override: Use the toggle at the top to enable/disable the automation
 Manual Operation: Use the manual controls at the bottom when needed
 <br>
 Monitoring: The history graph and logbook will help you track performance over time
+<br>
